@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'word_cloud_page.dart';
+import 'word_cloud_page.dart'; // Importa el archivo de la página de la nube de palabras y K-means
 
 void main() {
   runApp(MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: WordCloudPage(),
+      home: WordCloudPage(), // Carga la página de la nube de palabras
     );
   }
 }

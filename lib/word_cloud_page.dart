@@ -7,12 +7,19 @@ class WordCloudPage extends StatefulWidget {
 }
 
 class _WordCloudPageState extends State<WordCloudPage> {
-  // Lista de palabras para la nube
-  final List<String> words = [
-    'Flutter', 'K-means', 'Machine Learning', 'Nube de palabras', 'Algoritmo', 'Cluster', 'Datos', 'Modelo'
+  // Lista de palabras con frecuencias simuladas para la nube de palabras
+  final List<Map<String, dynamic>> words = [
+    {'word': 'Flutter', 'frequency': 10},
+    {'word': 'K-means', 'frequency': 7},
+    {'word': 'Machine Learning', 'frequency': 15},
+    {'word': 'Nube de palabras', 'frequency': 5},
+    {'word': 'Algoritmo', 'frequency': 8},
+    {'word': 'Cluster', 'frequency': 12},
+    {'word': 'Datos', 'frequency': 9},
+    {'word': 'Modelo', 'frequency': 6},
   ];
-  
-  // Almacenar resultados de K-means (simulados)
+
+  // Almacena resultados de K-means
   Map<String, int> kmeansResults = {};
 
   @override
@@ -21,16 +28,16 @@ class _WordCloudPageState extends State<WordCloudPage> {
     performKMeansClustering();
   }
 
-  // Función para simular el algoritmo K-means
+  // Simula el algoritmo K-means para asignar palabras a clusters
   void performKMeansClustering() {
     Random random = Random();
-    for (var word in words) {
-      // Asigna aleatoriamente una palabra a uno de los 3 clusters
-      kmeansResults[word] = random.nextInt(3); // Clusters: 0, 1, 2
+    for (var wordData in words) {
+      // Asigna aleatoriamente cada palabra a uno de los 3 clusters
+      kmeansResults[wordData['word']] = random.nextInt(3); // Clusters: 0, 1, 2
     }
   }
 
-  // Genera colores aleatorios para cada palabra de acuerdo a su cluster
+  // Genera colores distintos para cada cluster
   Color getColorForCluster(int cluster) {
     switch (cluster) {
       case 0:
@@ -44,25 +51,32 @@ class _WordCloudPageState extends State<WordCloudPage> {
     }
   }
 
+  // Genera el tamaño de fuente basado en la frecuencia de la palabra
+  double getFontSizeForFrequency(int frequency) {
+    return 14 + frequency.toDouble(); // Ajusta el tamaño con base en la frecuencia
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('K-means & Nube de Palabras'),
+        title: Text('K-means & Word Cloud'),
       ),
       body: Center(
         child: Wrap(
           alignment: WrapAlignment.center,
           spacing: 8.0,
           runSpacing: 8.0,
-          children: words.map((word) {
+          children: words.map((wordData) {
+            String word = wordData['word'];
+            int frequency = wordData['frequency'];
             int cluster = kmeansResults[word] ?? 0;
             Color color = getColorForCluster(cluster);
 
             return Text(
               word,
               style: TextStyle(
-                fontSize: 20 + cluster * 5.0, // Tamaño de letra según el cluster
+                fontSize: getFontSizeForFrequency(frequency),
                 color: color,
                 fontWeight: FontWeight.bold,
               ),
